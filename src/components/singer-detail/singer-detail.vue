@@ -47,7 +47,7 @@ export default {
         let { musicData } = item;
         getSongVkey(musicData.songmid).then(res => {
           let vkey = res.data.items[0].vkey;
-          if (musicData.songid && musicData.albummid) {
+          if (vkey && musicData.songid && musicData.albummid) {
             ret.push(createSong(musicData, vkey));
           }
         });

@@ -2,7 +2,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
   
-  export function shuffle(arr) {
+  export function shuffle(arr) {    //打乱
     let _arr = arr.slice()
     for (let i = 0; i < _arr.length; i++) {
       let j = getRandomInt(0, i)
@@ -13,7 +13,7 @@ function getRandomInt(min, max) {
     return _arr
   }
   
-  export function debounce(func, delay) {
+  export function debounce(func, delay) { //防抖
     let timer
   
     return function (...args) {
@@ -25,3 +25,16 @@ function getRandomInt(min, max) {
       }, delay)
     }
   }
+
+  export function throttle (func, delay) { //节流
+    var timer = null;
+    return function(...args) {
+        if(timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        }, delay)
+        
+    }
+}

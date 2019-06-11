@@ -9,7 +9,6 @@
 import ListView from "base/listview/listview";
 import { getSingerList } from "api/singer";
 import { ERR_OK } from "api/config";
-import Singer from "common/js/singer";
 import { mapMutations } from "vuex";
 //   import {playlistMixin} from 'common/js/mixin'
 
@@ -41,11 +40,11 @@ export default {
     _getSingerList() {
       getSingerList().then(res => {
         if (res.code === ERR_OK) {
-          this.singers = this._normalizeSinger(res.data.list);
+          this.singers = this._handleSinger(res.data.list);
         }
       });
     },
-    _normalizeSinger(list) {
+    _handleSinger(list) {
       let map = {
         hot: {
           title: HOT_NAME,
@@ -54,12 +53,11 @@ export default {
       };
       list.forEach((item, index) => {
         if (index < HOT_SINGER_LEN) {
-          map.hot.items.push(
-            new Singer({
-              name: item.Fsinger_name,
-              id: item.Fsinger_mid
-            })
-          );
+          map.hot.items.push({
+            name: item.Fsinger_name,
+            id: item.Fsinger_mid,
+            avatar: `https://y.gtimg.cn/music/photo_new/T001R300x300M000${item.Fsinger_mid}.jpg?max_age=2592000`
+          });
         }
         const key = item.Findex;
         if (!map[key]) {
@@ -68,12 +66,11 @@ export default {
             items: []
           };
         }
-        map[key].items.push(
-          new Singer({
-            name: item.Fsinger_name,
-            id: item.Fsinger_mid
-          })
-        );
+        map[key].items.push({
+          name: item.Fsinger_name,
+          id: item.Fsinger_mid,
+          avatar: `https://y.gtimg.cn/music/photo_new/T001R300x300M000${item.Fsinger_mid}.jpg?max_age=2592000`
+        });
       });
       // 为了得到有序列表，我们需要处理 map
       let ret = [];

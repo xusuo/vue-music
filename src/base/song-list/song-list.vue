@@ -3,7 +3,7 @@
     <ul>
       <li @click="selectItem(song, index)" class="item" v-for="(song, index) in songs" :key="song.id">
         <div class="rank" v-show="rank">
-          <span :class="getRankCls(index)" v-text="getRankText(index)"></span>
+          <span class="text" v-text="index + 1"></span>
         </div>
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
@@ -26,6 +26,8 @@ export default {
       default: false
     }
   },
+  mounted(){
+  },
   computed: {
 
   },
@@ -35,18 +37,6 @@ export default {
     },
     getDesc(song) {
       return `${song.singer}·${song.album}`;
-    },
-    getRankCls(index) {
-      if (index <= 2) {
-        return `icon icon${index}`;
-      } else {
-        return "text";
-      }
-    },
-    getRankText(index) {
-      if (index > 2) {
-        return index + 1;
-      }
     }
   }
 };

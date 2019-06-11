@@ -108,16 +108,16 @@
     watch: {
       scrollY(newVal) {
         let translateY = Math.max(this.minTransalteY, newVal)
-        let scale = 1
+        // let scale = 1
         let zIndex = 0
-        let blur = 0
-        const percent = Math.abs(newVal / this.imageHeight)
-        if (newVal > 0) {
-          scale = 1 + percent
-          zIndex = 10
-        } else {
-          blur = Math.min(20, percent * 20)
-        }
+        // let blur = 0
+        // const percent = Math.abs(newVal / this.imageHeight)
+        // if (newVal > 0) {
+        //   scale = 1 + percent
+        //   zIndex = 10
+        // } else {
+        //   blur = Math.min(20, percent * 20)
+        // }
 
         this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
         this.$refs.filter.style[backdrop] = `blur(${blur}px)`
@@ -131,7 +131,7 @@
           this.$refs.bgImage.style.height = 0
           this.$refs.playBtn.style.display = ''
         }
-        this.$refs.bgImage.style[transform] = `scale(${scale})`
+        // this.$refs.bgImage.style[transform] = `scale(${scale})`
         this.$refs.bgImage.style.zIndex = zIndex
       }
     },

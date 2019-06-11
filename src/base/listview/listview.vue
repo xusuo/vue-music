@@ -16,16 +16,17 @@
         </ul>
       </li>
     </ul>
-    <div class="list-shortcut" @touchstart.stop.prevent="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove"
+    <div class="list-shortcut"
+         @touchstart.stop.prevent="onShortcutTouchStart" 
+         @touchmove.stop.prevent="onShortcutTouchMove"
          @touchend.stop>
       <ul>
-        <li v-for="(item, index) in shortcutList" :key="item" :data-index="index" class="item"
-            :class="{'current':currentIndex===index}">{{item}}
+        <li v-for="(item, index) in shortcutList" 
+            :key="index" :data-index="index" class="item"
+            :class="{'current':currentIndex===index}">
+            {{item}}
         </li>
       </ul>
-    </div>
-    <div class="list-fixed" ref="fixed" v-show="fixedTitle">
-      <div class="fixed-title">{{fixedTitle}} </div>
     </div>
     <div v-show="!data.length" class="loading-container">
       <loading></loading>
@@ -51,8 +52,7 @@ export default {
   data() {
     return {
       scrollY: -1,
-      currentIndex: 0,
-      diff: -1
+      currentIndex: 0
     };
   },
   computed: {
@@ -60,12 +60,6 @@ export default {
       return this.data.map(group => {
         return group.title.substr(0, 1);
       });
-    },
-    fixedTitle() {
-      if (this.scrollY > 0) {
-        return "";
-      }
-      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : "";
     }
   },
   created() {
@@ -80,14 +74,12 @@ export default {
     },
     onShortcutTouchStart(e) {
       let anchorIndex = getData(e.target, "index");
-      let firstTouch = e.touches[0];
-      this.touch.y1 = firstTouch.pageY;
+      this.touch.y1 = e.touches[0].pageY;
       this.touch.anchorIndex = anchorIndex;
       this._scrollTo(anchorIndex);
     },
     onShortcutTouchMove(e) {
-      let firstTouch = e.touches[0];
-      this.touch.y2 = firstTouch.pageY;
+      this.touch.y2 = e.touches[0].pageY;
       let delta = Math.floor((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT);
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta;
       this._scrollTo(anchorIndex);
@@ -141,21 +133,11 @@ export default {
         let height2 = listHeight[i + 1];
         if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i;
-          this.diff = height2 + newY;
           return;
         }
       }
       // 当滚动到底部，且-newY大于最后一个元素的上限
       this.currentIndex = listHeight.length - 2;
-    },
-    diff(newVal) {
-      let fixedTop =
-        newVal > 0 && newVal < TITLE_HEIGHT ? newVal - TITLE_HEIGHT : 0;
-      if (this.fixedTop === fixedTop) {
-        return;
-      }
-      this.fixedTop = fixedTop;
-      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`;
     }
   },
   components: {
@@ -228,22 +210,6 @@ export default {
             &.current {
                 color: $color-theme;
             }
-        }
-    }
-
-    .list-fixed {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-
-        .fixed-title {
-            height: 30px;
-            line-height: 30px;
-            padding-left: 20px;
-            font-size: $font-size-small;
-            color: $color-text-l;
-            background: $color-highlight-background;
         }
     }
 

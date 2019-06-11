@@ -21,6 +21,10 @@
         type: Array,
         default: null
       },
+       pullup: {
+        type: Boolean,
+        default: false
+      },
       listenScroll: {
         type: Boolean,
         default: false
@@ -41,9 +45,15 @@
           click: this.click
         }) 
         if (this.listenScroll) {
-          let that = this
           this.scroll.on('scroll', (pos) => {
-            that.$emit('scroll', pos)
+            this.$emit('scroll', pos)
+          })
+        }  
+        if (this.pullup) {
+          this.scroll.on('scrollEnd', () => {
+            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              this.$emit('scrollToEnd')
+            }
           })
         }      
       },
